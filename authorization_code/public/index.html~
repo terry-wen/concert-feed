@@ -74,16 +74,25 @@
 		background-color: #FFF;
 		color: #111;
 	}
+<<<<<<< 1d16aa43acb8969da2edc6f9794d0ec953ed7da9
+	div.tall{
+		height: 25%;
+=======
 	.middle{
 		position: relative;
 		top: 50%;
 		transform: translateY(75%);
+>>>>>>> login page formatting fix
 	}
     </style>
   </head>
 
   <body>
+<<<<<<< 1d16aa43acb8969da2edc6f9794d0ec953ed7da9
+	  <div class="tall"></div>
+=======
 	  <div class="middle">
+>>>>>>> login page formatting fix
       <div id="login">
 			<div class="titlecard">
 				<img src="assets/CFlogo.png" width="90%"><br>
@@ -94,9 +103,10 @@
 			<br>
 			<h1><img src="assets/footer.png" width="35%"></h1>
 		</div>
-
+<<<<<<< 1d16aa43acb8969da2edc6f9794d0ec953ed7da9
+=======
 		</div>
-
+>>>>>>> login page formatting fix
       <div id="loggedin">
         <div id="user-profile">
         </div>
