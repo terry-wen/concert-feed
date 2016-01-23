@@ -92,16 +92,15 @@
             refresh_token = params.refresh_token,
             error = params.error;
 		
-		var artists = [];
 		
-		function getArtists(songs) {
+		function getArtists(songs, artists) {
 			for(i=0;i<songs.items.length;i++){
-				for(j=0;j<songs.items[i].track.artists.length;j++){
-					if (artists.indexOf(songs.items[i].track.artists[j].name) == -1 ) {
-						artists.push(songs.items[i].track.artists[j].name);
+					if (artists.indexOf(songs.items[i].track.artists[0].name) == -1 ) {
+						artists.push(songs.items[i].track.artists[0].name);
+						console.log(songs.items[i].track.artists[0].name);
 					}
-				}
 			}
+			return artists;
 		}
 		
         if (error) {
@@ -113,39 +112,48 @@
               access_token: access_token,
               refresh_token: refresh_token
             });
-			
-			var songs = {'total': 50};
+
+			var artists = [];			
+			var songs;
 			var offset = 0;
 			var total = 0;
 			
-			$.ajax({
+			$.when($.ajax({
 				url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=50',
 				headers: {
 				'Authorization': 'Bearer ' + access_token
 				},
 				success: function(response) {
+					songs = response;
 					total = songs.total;
-				}
-			});
-			
-			for(offset=0;offset<=total;offset+=50){
-				(function(offset){
-				$.ajax({
-					url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=50',
-					headers: {
-					'Authorization': 'Bearer ' + access_token
-					},
-					success: function(response) {
-						songs = response;
-						getArtists(songs);
-						for(i=0;i<artists.length;i++){
-							console.log(artists[i]);
-						}
-						trackurl = songs.next;
+					for(offset=0;offset<=total+50;offset+=50){
+						(function(offset){
+						$.ajax({
+							url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=50',
+							headers: {
+							'Authorization': 'Bearer ' + access_token
+							},
+							success: function(response) {
+								songs = response;
+								artists = getArtists(songs, artists);
+							}
+						});
+						})(offset);
 					}
-				});
-				})(offset);
-			}
+				}
+			})).then(function(){
+			$.ajax({
+			  url: 'https://api.spotify.com/v1/me',
+                headers: {
+                  'Authorization': 'Bearer ' + access_token
+                },
+                success: function(response) {
+                  userProfilePlaceholder.innerHTML = userProfileTemplate(response);
+                  $('#login').hide();
+                  $('#loggedin').show();
+                }
+            });})
+
 			
           } else {
               // render initial screen
