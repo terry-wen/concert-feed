@@ -124,7 +124,7 @@
 	</div>
       <div id="loggedin">
         <div class="column">
-			<div class"header"><table><tr><td width="25%" style="text-align: left;"><td width="50%"><img src="assets/CFlogo.png" width="100%"></td><td width="25%" style="text-align: right"></td></tr></table></div>
+			<div><table><tr><td width="25%" style="text-align: left;"><div id="name"></div></td><td width="50%"><img src="assets/CFlogo.png" width="100%"></td><td width="25%" style="text-align: right"></td></tr></table></div>
 			<hr>
 			<div id="concerts">
         </div>
@@ -175,7 +175,7 @@
 						//console.log(songs.items[i].track.artists[0].name);
 						$.getJSON("http://api.bandsintown.com/artists/"+name+"/events/search.json?api_version=2.0&callback=?&app_id=concertFeed&location=use_geoip&radius=100", function(result) {
 							if(typeof result !== 'undefined' && result.length > 0){
-								console.log(result);
+								//console.log(result);
 								date = new Date(result[0].datetime);
 									output = "<table><tr><td width=\"150px\"><img src=\""+result[0].artists[0].thumb_url+"\" width=\"100px\"></td><td width=\"85%-150px\" style=\"padding-left:15px\">"+result[0].artists[0].name+" @ " + result[0].venue.name + "<br>"+days[date.getDay()]+", "+ months[date.getMonth()] +" "+ date.getDate() +" in " + result[0].venue.city + ", " + result[0].venue.region +"<br><div class=\"buttonOuter\"><a href=\""+result[0].facebook_rsvp_url+"\"><div class=\"button\" align=\"center\">View on Bandsintown</div></a></div></td><td width=\"15%\"></td></tr></table><br>"
 									document.getElementById('concerts').innerHTML += output;
@@ -218,7 +218,20 @@
 						})(offset);
 					}
 				}
-			}))
+			}));
+			
+			$.ajax({
+					url: 'https://api.spotify.com/v1/me',
+					headers: {
+						'Authorization': 'Bearer ' + access_token
+					},
+					success: function(response) {
+						if(response.display_name != null){
+							console.log(response.display_name);
+							document.getElementById('name').innerHTML = "Hello, " + response.display_name;
+						}
+					}
+				});
 			
 			$('#loggedin').show();
 			
