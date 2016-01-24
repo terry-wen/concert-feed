@@ -10,12 +10,13 @@
 
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
+var path = require("path");
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
 var client_id = 'efb4f5e964e94d2aa3d5c7fa1fffabe0'; // Your client id
 var client_secret = '2b6bd34ae2164fdeb46349c9a9ab43b0'; // Your client secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+var redirect_uri = 'https://concert-feed.herokuapp.com/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
@@ -32,13 +33,24 @@ var generateRandomString = function(length) {
   return text;
 };
 
-var stateKey = 'spotify_auth_state';
-
 var app = express();
 
-app.use(express.static(__dirname + '/public'))
+var stateKey = 'spotify_auth_state';
+
+app.set('view engine', 'html');
+
+app.use(express.static(path.join(__dirname, 'public')))
    .use(cookieParser());
 
+app.set('port', (process.env.PORT || 5000));
+//For avoidong Heroku $PORT error
+app.get('/', function(request, response) {
+    var result = 'App is running'
+    response.render('index', {});
+}).listen(app.get('port'), function() {
+    console.log('App is running, server is listening on port ', app.get('port'));
+});
+   
 app.get('/login', function(req, res) {
 
   var state = generateRandomString(16);
