@@ -150,36 +150,41 @@
             refresh_token = params.refresh_token,
             error = params.error;
 		
+		var artists = [];
+		var events = [];
 		
 		function getArtists(songs, artists) {
 			for(i=0;i<songs.items.length;i++){
 					if (artists.indexOf(songs.items[i].track.artists[0].name) == -1 ) {
 						artists.push(songs.items[i].track.artists[0].name);
-						console.log(songs.items[i].track.artists[0].name);
-					}
+						// console.log(songs.items[i].track.artists[0].name);
+						$.getJSON("http://api.bandsintown.com/artists/"+songs.items[i].track.artists[0].name+"/events/search.json?api_version=2.0&callback=?&app_id=concertFeed&location=San+Diego,CA&radius=10", function(result) {
+							if(result != []){
+								console.log(result);
+							}
+						});
+				}
 			}
-			return artists;
 		}
 		
         if (error) {
           alert('There was an error during the authentication');
         } else {
           if (access_token) {
-
-			var artists = [];			
+			
 			var songs;
 			var offset = 0;
-			var total = 0;
+			var total;
 			
 			$.when($.ajax({
-				url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=50',
+				url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=20',
 				headers: {
 				'Authorization': 'Bearer ' + access_token
 				},
 				success: function(response) {
 					songs = response;
 					total = songs.total;
-					for(offset=0;offset<=total+50;offset+=50){
+					for(offset=0;offset<=total+20&&artists.length<=50;offset+=20){
 						(function(offset){
 						$.ajax({
 							url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=50',
@@ -188,24 +193,19 @@
 							},
 							success: function(response) {
 								songs = response;
-								artists = getArtists(songs, artists);
+								getArtists(songs, artists);
 							}
 						});
 						})(offset);
 					}
 				}
-			})).then(function(){
-			$.ajax({
-			  url: 'https://api.spotify.com/v1/me',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
-                  userProfilePlaceholder.innerHTML = userProfileTemplate(response);
-                  $('#login').hide();
-                  $('#loggedin').show();
-                }
-            });})
+			})).then(function(){				
+					for(i=0;i<artists.length;i++){
+					
+				}
+			})
+			
+
 
 			
           } else {
