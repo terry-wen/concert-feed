@@ -113,6 +113,9 @@
 			    font-family: "CMU Sans";
 
 	}
+	div.na{
+		text-align: center;
+	}
     </style>
   </head>
 
@@ -133,8 +136,7 @@
         <div class="column">
 			<div><table><tr><td width="25%" style="text-align: left;"><div id="name"></div></td><td width="50%"><img src="assets/CFlogo.png" width="100%"></td><td width="25%" style="text-align: right"></td></tr></table></div>
 			<hr>
-			<div id="concerts">
-        </div>
+			<div id="concerts"><div class="na">No concerts nearby! Check again soon!</div></div>
 	
 	</div>
 	</div>
@@ -174,6 +176,8 @@
 		var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 		var date;
 		
+		var list = "";
+		
 		function getArtists(songs, artists) {
 			for(i=0;i<songs.items.length;i++){
 				name = songs.items[i].track.artists[0].name;
@@ -185,8 +189,11 @@
 								//console.log(result);
 								date = new Date(result[0].datetime);
 									output = "<table><tr><td width=\"150px\"><img src=\""+result[0].artists[0].thumb_url+"\" width=\"100px\"></td><td width=\"85%-150px\" style=\"padding-left:15px\">"+result[0].artists[0].name+" @ " + result[0].venue.name + "<br>"+days[date.getDay()]+", "+ months[date.getMonth()] +" "+ date.getDate() +" in " + result[0].venue.city + ", " + result[0].venue.region +"</td><td width=\"15%\"><div class=\"buttonOuter\"><a href=\""+result[0].facebook_rsvp_url+"\"><div class=\"button\" align=\"center\"><img class=\"bitimg\" alt=\"Open in Bandsintown\"></div></a></div></td></tr></table><br>"
+									if(document.getElementById('concerts').innerHTML === "<div class=\"na\">No concerts nearby! Check again soon!</div>"){
+										document.getElementById('concerts').innerHTML = output;
+								} else {
 									document.getElementById('concerts').innerHTML += output;
-								//events.push(result);
+								} 
 							}
 						});
 				}
@@ -234,7 +241,6 @@
 					},
 					success: function(response) {
 						if(response.display_name != null){
-							console.log(response.display_name);
 							document.getElementById('name').innerHTML = "Hello, " + response.display_name;
 						}
 					}
