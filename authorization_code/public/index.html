@@ -157,9 +157,9 @@
 			for(i=0;i<songs.items.length;i++){
 					if (artists.indexOf(songs.items[i].track.artists[0].name) == -1 ) {
 						artists.push(songs.items[i].track.artists[0].name);
-						// console.log(songs.items[i].track.artists[0].name);
+						//console.log(songs.items[i].track.artists[0].name);
 						$.getJSON("http://api.bandsintown.com/artists/"+songs.items[i].track.artists[0].name+"/events/search.json?api_version=2.0&callback=?&app_id=concertFeed&location=San+Diego,CA&radius=10", function(result) {
-							if(result != []){
+							if(typeof result !== 'undefined' && result.length > 0){
 								console.log(result);
 							}
 						});
@@ -184,7 +184,7 @@
 				success: function(response) {
 					songs = response;
 					total = songs.total;
-					for(offset=0;offset<=total+20&&artists.length<=50;offset+=20){
+					for(offset=0;offset<=total+20;offset+=20){
 						(function(offset){
 						$.ajax({
 							url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=50',
