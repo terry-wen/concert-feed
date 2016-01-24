@@ -56,7 +56,6 @@
 	}
 	div.buttonOuter {
 		width: 50%;
-	/*	box-shadow: 1px 1px 1px #000;*/
 		margin: auto;		
 	}
 	div.button {
@@ -72,12 +71,37 @@
 	}
 	a:hover div.button{
 		background-color: #FFF;
+		text-decoration: none;
 		color: #111;
 	}
 	.middle{
 		position: relative;
 		top: 50%;
 		transform: translateY(75%);
+	}
+		div.header{
+		width: 100%;
+		font-size: 12pt;
+		height:25px;
+		border-bottom: 1px solid white;
+	}
+	table{
+		border: none;
+		color:white;
+		width:100%;
+	}
+	div.column{
+		background-color: rgba(0,0,0,.8);
+		height: 100%;
+		width: 65%;
+		border-left: 1px solid white;
+		border-right: 1px solid white;
+		margin: auto;
+		color: #FFF;
+		padding-left: 15px;
+		padding-right: 15px;
+			    font-family: "CMU Sans Serif";
+
 	}
     </style>
   </head>
@@ -96,29 +120,13 @@
 		</div>
 		</div>
       <div id="loggedin">
-        <div id="user-profile">
+        <div class="column">
+			<div class"header"><table><tr><td width="25%" style="text-align: left;"><td width="50%"><img src="assets/CFlogo.png" width="100%"></td><td width="25%" style="text-align: right"></td></tr></table></div>
+			<hr>
+			<div id="concerts">
         </div>
-
-    <script id="user-profile-template" type="text/x-handlebars-template">
-      <h1>Logged in as {{display_name}}</h1>
-      <div class="media">
-        <div class="pull-left">
-          <img class="media-object" width="150" src="{{images.0.url}}" />
-        </div>
-        <div class="media-body">
-          <dl class="dl-horizontal">
-            <dt>Display name</dt><dd class="clearfix">{{display_name}}</dd>
-            <dt>Id</dt><dd>{{id}}</dd>
-            <dt>Email</dt><dd>{{email}}</dd>
-            <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
-            <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
-            <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
-            <dt>Country</dt><dd>{{country}}</dd>
-          </dl>
-        </div>
-      </div>
-    </script>
 	
+	</div>
 	</div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
@@ -140,10 +148,6 @@
           return hashParams;
         }
 
-        var userProfileSource = document.getElementById('user-profile-template').innerHTML,
-            userProfileTemplate = Handlebars.compile(userProfileSource),
-            userProfilePlaceholder = document.getElementById('user-profile');
-
         var params = getHashParams();
 
         var access_token = params.access_token,
@@ -152,15 +156,22 @@
 		
 		var artists = [];
 		var events = [];
+		var output = "";
+		
+		var name;
 		
 		function getArtists(songs, artists) {
 			for(i=0;i<songs.items.length;i++){
-					if (artists.indexOf(songs.items[i].track.artists[0].name) == -1 ) {
-						artists.push(songs.items[i].track.artists[0].name);
+				name = songs.items[i].track.artists[0].name;
+					if (artists.indexOf(name) == -1 ) {
+						artists.push(name);
 						//console.log(songs.items[i].track.artists[0].name);
-						$.getJSON("http://api.bandsintown.com/artists/"+songs.items[i].track.artists[0].name+"/events/search.json?api_version=2.0&callback=?&app_id=concertFeed&location=use_geoip&radius=100", function(result) {
+						$.getJSON("http://api.bandsintown.com/artists/"+name+"/events/search.json?api_version=2.0&callback=?&app_id=concertFeed&location=use_geoip&radius=100", function(result) {
 							if(typeof result !== 'undefined' && result.length > 0){
 								console.log(result);
+									output = "<table><tr><td width=\"150px\"><img src=\""+result[0].artists[0].thumb_url+"\" width=\"100px\"></td><td width=\"85%-150px\" style=\"padding-left:15px\">"+result[0].artists[0].name+" @ " + result[0].venue.name + "<br>"+result[0].datetime+" in " + result[0].venue.city + ", " + result[0].venue.region +"<br><div class=\"buttonOuter\"><a href=\""+result[0].facebook_rsvp_url+"\"><div class=\"button\" align=\"center\">View on Bandsintown</div></a></div></td><td width=\"15%\"></td></tr></table><br>"
+									document.getElementById('concerts').innerHTML += output;
+								//events.push(result);
 							}
 						});
 				}
@@ -199,14 +210,9 @@
 						})(offset);
 					}
 				}
-			})).then(function(){				
-					for(i=0;i<artists.length;i++){
-					
-				}
-			})
+			}))
 			
-
-
+			$('#loggedin').show();
 			
           } else {
               // render initial screen
