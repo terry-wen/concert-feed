@@ -158,7 +158,7 @@
 					if (artists.indexOf(songs.items[i].track.artists[0].name) == -1 ) {
 						artists.push(songs.items[i].track.artists[0].name);
 						//console.log(songs.items[i].track.artists[0].name);
-						$.getJSON("http://api.bandsintown.com/artists/"+songs.items[i].track.artists[0].name+"/events/search.json?api_version=2.0&callback=?&app_id=concertFeed&location=use_geoip&radius=50", function(result) {
+						$.getJSON("http://api.bandsintown.com/artists/"+songs.items[i].track.artists[0].name+"/events/search.json?api_version=2.0&callback=?&app_id=concertFeed&location=use_geoip&radius=100", function(result) {
 							if(typeof result !== 'undefined' && result.length > 0){
 								console.log(result);
 							}
