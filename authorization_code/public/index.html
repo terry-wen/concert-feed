@@ -102,7 +102,6 @@
 	}
 	div.column{
 		background-color: rgba(0,0,0,.8);
-		height: 100%;
 		width: 65%;
 		border-left: 1px solid white;
 		border-right: 1px solid white;
@@ -110,8 +109,9 @@
 		color: #FFF;
 		padding-left: 15px;
 		padding-right: 15px;
-			    font-family: "CMU Sans";
-
+	    font-family: "CMU Sans";
+	    padding-bottom: 35px;
+	    border-bottom: 1px solid white;
 	}
     </style>
   </head>
@@ -130,12 +130,15 @@
 		</div>
 	</div>
       <div id="loggedin">
-        <div class="column">
+        <div class="column" id="col">
 			<div><table><tr><td width="25%" style="text-align: left;"><div id="name"></div></td><td width="50%"><img src="assets/CFlogo.png" width="100%"></td><td width="25%" style="text-align: right"></td></tr></table></div>
 			<hr>
 			<div id="concerts">
         </div>
-	
+ 		<script>var h = $("#col").height();
+ 		document.write("<div style=\"height: " + (window.innerHeight - h) + "px;\"></div>");
+ 		document.write("test");</script>
+
 	</div>
 	</div>
 
