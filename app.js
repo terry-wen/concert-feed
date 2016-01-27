@@ -42,7 +42,7 @@ app.set('view engine', 'html');
 app.use(express.static(path.join(__dirname, 'public')))
    .use(cookieParser());
 
-//app.set('port', (process.env.PORT || 5000));
+app.set('port', (process.env.PORT || 5000));
 //For avoiding Heroku $PORT error
 app.get('/', function(request, response) {
     var result = 'App is running'
