@@ -15,7 +15,7 @@ var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
 var client_id = 'efb4f5e964e94d2aa3d5c7fa1fffabe0'; // Your client id
-var client_secret = '2b6bd34ae2164fdeb46349c9a9ab43b0'; // Your client secret
+var client_secret = ''; // Your client secret
 var redirect_uri = 'https://concertfeed.herokuapp.com/callback'; // Your redirect uri
 
 /**
