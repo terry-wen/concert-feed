@@ -1,0 +1,140 @@
+@font-face {
+  font-family: CMU Sans;
+  src: url(../assets/cmusans.ttf);
+}
+
+#login, #loggedin {
+  display: none;
+}
+
+::selection {
+  background: #FD0023;
+}
+
+html, body {
+  height: 100vh;
+}
+
+body {
+  background-color: #131313;
+  background: url(../assets/bghome.png) center center;
+  background-size: cover;
+  background-attachment: : fixed;
+}
+
+/*that hip box with my name and stuff in it */
+div.titlecard {
+  padding: 30px 30px 30px 30px;
+  border: 2px solid white;
+  color: white;
+  text-shadow:
+    -1px -1px 1px #000,
+    1px -1px 1px #000,
+    -1px 1px 1px #000,
+    1px 1px 1px #000;
+  font-family: "CMU Sans";
+  font-size: 12pt;
+  text-align: center;
+  box-shadow:
+    -2px -2px 1px #000,
+    2px -2px 1px #000,
+    -2px 2px 1px #000,
+    2px 2px 1px #000;
+}
+
+h1 {
+  font-size: 16pt;
+  text-align: center;
+}
+
+div.titlecard p {
+  font-size: 16pt;
+  text-align: justify;
+}
+
+div.buttonOuter {
+  width: 50%;
+  min-width: 60px;
+  margin: auto;
+}
+
+div.button {
+  background-color: #111;
+  padding: 5pt;
+  text-shadow: none;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+img.bitimg {
+  content: url("../assets/btwhite.png");
+}
+
+a {
+  text-decoration: none;
+  color: #FFF;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:hover div.button {
+  background-color: #FFF;
+  text-decoration: none;
+  color: #111;
+}
+
+a:hover img.bitimg {
+  content: url("../assets/btblack.png");
+}
+
+div.header {
+  width: 100%;
+  font-size: 12pt;
+  height:25px;
+  border-bottom: 1px solid white;
+}
+
+table {
+  border: none;
+  color:white;
+  width:100%;
+}
+
+div.column {
+  background-color: rgba(0,0,0,.8);
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+  color: #FFF;
+  padding: 15px;
+  font-family: "CMU Sans";
+  border-bottom: 1px solid white;
+}
+
+div.na {
+  text-align: center;
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+
+.footer-image {
+  width: 100%;
+  padding: 20px 10px;
+}
+
+.thumb {
+  width: 100%;
+  border: 1px solid white;
+}
+
+div.concertRow {
+  margin: 10px;
+  min-height: auto;
+}

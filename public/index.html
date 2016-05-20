@@ -1,259 +1,59 @@
 <!doctype html>
 <html>
   <head>
-  	<LINK REL="icon" HREF="assets/favicon.ico">
     <title>ConcertFeed: Let Music Find You</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <style type="text/css">
-      @font-face {
-    font-family: CMU Sans;
-    src: url(assets/cmusans.ttf);
-}
-
-      #login, #loggedin {
-        display: none;
-      }
-      .text-overflow {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        width: 500px;
-      }
-	  ::selection {
-		background: #FD0023;
-	  }
-	body{
-		margin: 0;
-		padding: 0;
-		background-color: #131313;
-		background: url(assets/bghome.png) center top;
-		background-size: cover;
-	}
-
-	/*that hip box with my name and stuff in it */
-	div.titlecard{
-		padding: 30px 30px 30px 30px;
-		border: 2px solid white;
-		color: white;
- 		 text-shadow:
-   		-1px -1px 1px #000,  
-   		 1px -1px 1px #000,
-	    -1px 1px 1px #000,
- 	    1px 1px 1px #000;
-	    font-family: "CMU Sans";
-	    font-size: 12pt;
-		margin: auto;
-		width: 35%;
-		text-align: center;
-		box-shadow: 
-		   -2px -2px 1px #000,  
-    2px -2px 1px #000,
-    -2px 2px 1px #000,
-     2px 2px 1px #000;
-	}
-	 h1{
-		font-size: 16pt;
-		text-align: center;
-	}
-	div.titlecard p{
-		font-size: 16pt;
-		text-align: justify;
-	}
-	div.buttonOuter {
-		width: 50%;
-		margin: auto;		
-	}
-	div.button {
-		background-color: #111;
-		padding: 5pt;
-		text-shadow: none;
-		font-weight:bold;
-		border-radius:3px;
-	}
-	img.bitimg{
-		content: url("assets/btwhite.png");
-	}
-	a{
-		text-decoration: none;
-		color: #FFF;
-	}
-	a:hover{
-		text-decoration: none;
-	}
-	a:hover div.button{
-		background-color: #FFF;
-		text-decoration: none;
-		color: #111;
-	}
-	a:hover img.bitimg{
-		content: url("assets/btblack.png");
-	}
-
-		div.header{
-		width: 100%;
-		font-size: 12pt;
-		height:25px;
-		border-bottom: 1px solid white;
-	}
-	table{
-		border: none;
-		color:white;
-		width:100%;
-	}
-	div.column{
-		background-color: rgba(0,0,0,.8);
-		width: 65%;
-		border-left: 1px solid white;
-		border-right: 1px solid white;
-		margin: auto;
-		color: #FFF;
-		padding-left: 15px;
-		padding-right: 15px;
-	    font-family: "CMU Sans";
-	    padding-bottom: 35px;
-	    border-bottom: 1px solid white;
-	}
-	div.na{
-		text-align: center;
-	}
-    </style>
+  	<link rel="icon" href="assets/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
   </head>
 
   <body>
-      <div id="login">
-      	<script>document.write("<div style=\" height: " + window.innerHeight + "px; background: url(assets/bghome.png) center top; background-size: cover;\"><div style=\" height: " + window.innerHeight*.25 + "px;\"></div>")</script>
-			<div class="titlecard">
-				<img src="assets/CFlogo.png" width="90%"><br>
-				<h1><i>Connecting you with the live music you love.</i></h1>
-				<p>ConcertFeed uses your Spotify account and Bandsintown to alert you of concerts near you from all of your favorite artists.</p>
-					<div class="buttonOuter"><a href="/login"><div class="button" align="center">Get Started</div></a></div>
-			</div>
-			<br>
-			<h1><img src="assets/footer.png" width="35%"></h1>
-		</div>
-	</div>
-      <div id="loggedin">
-        <div class="column" id="col">
-			<div><table><tr><td width="25%" style="text-align: left;"><div id="name"></div></td><td width="50%"><img src="assets/CFlogo.png" width="100%"></td><td width="25%" style="text-align: right"></td></tr></table></div>
-			<hr>
-			<div id="concerts"><div class="na">No concerts nearby! Check again soon!</div></div>
-	</div>
-	</div>
+    <div id="login">
+      <div class="vertical-center">
+        <div class="row">
+          <div class="col-xs-10 col-xs-offset-1 col-md-4 col-md-offset-4">
+            <div class="row">
+        		  <div class="titlecard">
+                <img src="assets/CFlogo.png" width="90%">
+                <br>
+        				<h1>
+                  <i>Connecting you with the live music you love.</i>
+                </h1>
+        				<p>ConcertFeed uses your Spotify account and Bandsintown to alert you of concerts near you from all of your favorite artists.</p>
+        				<div class="buttonOuter">
+                  <a href="/login">
+                    <div class="button" align="center">
+                      Get Started
+                    </div>
+                  </a>
+                </div>
+        			</div>
+        		</div>
+            <div class="row">
+              <img class="footer-image" src="assets/footer.png">
+        		</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
-    <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script>
-      (function() {
+    <div id="loggedin">
+      <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 column">
+        <div class="row" >
+          <div id="name" class="col-xs-3"></div>
+            <div class="col-xs-6">
+              <img src="assets/CFlogo.png" width="100%">
+            </div>
+          <div id="logout" class="col-xs-3"></div>
+        </div>
+			  <hr>
+			  <div id="concerts">
+          <div class="na" id="na">No concerts nearby! Check again soon!</div>
+        </div>
+	    </div>
+	  </div>
 
-        /**
-         * Obtains parameters from the hash of the URL
-         * @return Object
-         */
-        function getHashParams() {
-          var hashParams = {};
-          var e, r = /([^&;=]+)=?([^&;]*)/g,
-              q = window.location.hash.substring(1);
-          while ( e = r.exec(q)) {
-             hashParams[e[1]] = decodeURIComponent(e[2]);
-          }
-          return hashParams;
-        }
-
-        var params = getHashParams();
-
-        var access_token = params.access_token,
-            refresh_token = params.refresh_token,
-            error = params.error;
-		
-		var artists = [];
-		var events = [];
-		var output = "";
-		
-		var name;
-		
-		var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-		var date;
-		
-		var list = "";
-		
-		function getArtists(songs, artists) {
-			for(i=0;i<songs.items.length;i++){
-				name = songs.items[i].track.artists[0].name;
-					if (artists.indexOf(name) == -1 ) {
-						artists.push(name);
-						//console.log(songs.items[i].track.artists[0].name);
-						$.getJSON("https://api.bandsintown.com/artists/"+name+"/events/search.json?api_version=2.0&callback=?&app_id=concertFeed&location=use_geoip&radius=100", function(result) {
-							if(typeof result !== 'undefined' && result.length > 0){
-								//console.log(result);
-								date = new Date(result[0].datetime);
-									output = "<table><tr><td width=\"150px\"><img src=\""+result[0].artists[0].thumb_url+"\" width=\"100px\"></td><td width=\"85%-150px\" style=\"padding-left:15px\">"+result[0].artists[0].name+" @ " + result[0].venue.name + "<br>"+days[date.getDay()]+", "+ months[date.getMonth()] +" "+ date.getDate() +" in " + result[0].venue.city + ", " + result[0].venue.region +"</td><td width=\"15%\"><div class=\"buttonOuter\"><a href=\""+result[0].facebook_rsvp_url+"\"><div class=\"button\" align=\"center\"><img class=\"bitimg\" alt=\"Open in Bandsintown\"></div></a></div></td></tr></table><br>"
-									if(document.getElementById('concerts').innerHTML === "<div class=\"na\">No concerts nearby! Check again soon!</div>"){
-										document.getElementById('concerts').innerHTML = output;
-								} else {
-									document.getElementById('concerts').innerHTML += output;
-								} 
-							}
-						});
-				}
-			}
-		}
-		
-        if (error) {
-          alert('There was an error during the authentication');
-        } else {
-          if (access_token) {
-			
-			var songs;
-			var offset = 0;
-			var total;
-			
-			$.when($.ajax({
-				url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=20',
-				headers: {
-				'Authorization': 'Bearer ' + access_token
-				},
-				success: function(response) {
-					songs = response;
-					total = songs.total;
-					for(offset=0;offset<=total+20;offset+=20){
-						(function(offset){
-						$.ajax({
-							url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=20',
-							headers: {
-							'Authorization': 'Bearer ' + access_token
-							},
-							success: function(response) {
-								songs = response;
-								getArtists(songs, artists);
-							}
-						});
-						})(offset);
-					}
-				}
-			}));
-			
-			$.ajax({
-					url: 'https://api.spotify.com/v1/me',
-					headers: {
-						'Authorization': 'Bearer ' + access_token
-					},
-					success: function(response) {
-						if(response.display_name != null){
-							document.getElementById('name').innerHTML = "Hello, " + response.display_name;
-						}
-					}
-				});
-			
-			$('#loggedin').show();
-			
-          } else {
-              // render initial screen
-              $('#login').show();
-              $('#loggedin').hide();
-          }
-        }
-      })();
-    </script>
+    <script src="js/handlebars.min.js"></script>
+    <script src="js/jquery-1.10.1.min.js"></script>
+    <script src="js/loadData.js"></script>
 </html>
-
