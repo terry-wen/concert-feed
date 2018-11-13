@@ -1,20 +1,25 @@
 {
-  "author": "twen6",
-  "name": "concertFeed",
+  "author": "Terry Wen",
+  "name": "concert-feed",
   "description": "Streamlined tool for people to see suggested upcoming concerts by their favorite artists",
-  "version": "0.0.1",
+  "license": "(MIT OR Apache-2.0)",
+  "version": "0.1.0",
   "main": "app.js",
   "scripts": {
-	"start": "node app.js"
+    "start": "node app.js"
   },
   "engines": {
-	  "node": "4.2.6",
-	  "npm": "2.14.12"
+    "node": "4.2.6",
+    "npm": "2.14.12"
   },
   "dependencies": {
-    "cookie-parser": "1.3.2",
-    "express": "~4.0.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.4",
     "querystring": "~0.2.0",
-    "request": "~2.34.0"
+    "request": "^2.88.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/terry-wen/concert-feed.git"
   }
 }

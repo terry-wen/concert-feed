@@ -1,4 +1,3 @@
-
 /**
  * This is an example of a basic node.js script that performs
  * the Authorization Code oAuth2 flow to authenticate against
@@ -7,76 +6,61 @@
  * For more information, read
  * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
  */
+let express = require('express'); // Express web server framework
+let request = require('request'); // "Request" library
+let path = require("path");
+let querystring = require('querystring');
+let cookieParser = require('cookie-parser');
+let credentials = require('./util/credentials.js');
+let utils = require('./util/util.js');
 
-var express = require('express'); // Express web server framework
-var request = require('request'); // "Request" library
-var path = require("path");
-var querystring = require('querystring');
-var cookieParser = require('cookie-parser');
+let LOGIN_URI = '/login';
+let REDIRECT_URI = '/callback';
+let REFRESH_URI = '/refresh_token';
+let STATE_KEY = 'spotify_auth_state';
 
-var client_id = 'efb4f5e964e94d2aa3d5c7fa1fffabe0'; // Your client id
-var client_secret = '2b6bd34ae2164fdeb46349c9a9ab43b0'; // Your client secret
-var redirect_uri = 'https://concertfeed.herokuapp.com/callback'; // Your redirect uri
-//var redirect_uri = 'http://localhost:8888/callback';
+let app = express();
 
-/**
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
-var generateRandomString = function(length) {
-  var text = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for (var i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
-};
-
-var app = express();
-
-var stateKey = 'spotify_auth_state';
-
-app.set('view engine', 'html');
-
-app.use(express.static(path.join(__dirname, 'public')))
-   .use(cookieParser());
+//app.set('view engine', 'html'); //dynamic views
+app.use(express.static(path.join(__dirname, 'public'))) //static html
+  .use(function(req, res, next) {
+    app.set('CURRENT_HOST', req.protocol + '://' + req.get('host'));
+    next();
+  })
+  .use(cookieParser());
 
 app.set('port', (process.env.PORT || 8888));
 //For avoiding Heroku $PORT error
-app.get('/', function(request, response) {
-    response.render('index', {});
-}).listen(app.get('port'), function() {
-    console.log('App is running, server is listening on port ', app.get('port'));
+app.listen(app.get('port'), function() {
+  console.log('App is running, server is listening on port', app.get('port'));
 });
 
-app.get('/login', function(req, res) {
+app.get('/', function(request, response) {
+    response.render('index', {});
+});
 
-  var state = generateRandomString(16);
-  res.cookie(stateKey, state);
+app.get(LOGIN_URI, function(req, res) {
+  let state = utils.generateRandomString(16);
+  res.cookie(STATE_KEY, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-library-read user-read-email';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
-      client_id: client_id,
-      scope: scope,
-      redirect_uri: redirect_uri,
+      client_id: credentials.client_id,
+      scope: 'user-read-private user-library-read user-read-email',
+      redirect_uri: app.get('CURRENT_HOST') + REDIRECT_URI,
       state: state,
-	    //show_dialog: true
+	    show_dialog: true
     }));
 });
 
-app.get('/callback', function(req, res) {
-
+app.get(REDIRECT_URI, function(req, res) {
   // your application requests refresh and access tokens
   // after checking the state parameter
-
   var code = req.query.code || null;
   var state = req.query.state || null;
-  var storedState = req.cookies ? req.cookies[stateKey] : null;
+  var storedState = req.cookies ? req.cookies[STATE_KEY] : null;
 
   if (state === null || state !== storedState) {
     res.redirect('/#' +
@@ -84,16 +68,16 @@ app.get('/callback', function(req, res) {
         error: 'state_mismatch'
       }));
   } else {
-    res.clearCookie(stateKey);
+    res.clearCookie(STATE_KEY);
     var authOptions = {
       url: 'https://accounts.spotify.com/api/token',
       form: {
         code: code,
-        redirect_uri: redirect_uri,
+        redirect_uri: app.get('CURRENT_HOST') + REDIRECT_URI,
         grant_type: 'authorization_code'
       },
       headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+        'Authorization': 'Basic ' + (new Buffer(credentials.client_id + ':' + credentials.client_secret).toString('base64'))
       },
       json: true
     };
@@ -131,8 +115,7 @@ app.get('/callback', function(req, res) {
   }
 });
 
-app.get('/refresh_token', function(req, res) {
-
+app.get(REFRESH_URI, function(req, res) {
   // requesting access token from refresh token
   var refresh_token = req.query.refresh_token;
   var authOptions = {
@@ -154,6 +137,3 @@ app.get('/refresh_token', function(req, res) {
     }
   });
 });
-
-//console.log('Listening on 8888');
-//app.listen(8888);
