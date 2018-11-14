@@ -9,8 +9,8 @@
     "start": "node app.js"
   },
   "engines": {
-    "node": "4.2.6",
-    "npm": "2.14.12"
+    "node": "11.0.0",
+    "npm": "6.4.1"
   },
   "dependencies": {
     "cookie-parser": "^1.4.3",
