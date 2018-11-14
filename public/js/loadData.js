@@ -1,5 +1,4 @@
 (function() {
-
   /**
    * Obtains parameters from the hash of the URL
    * @return Object
@@ -16,12 +15,9 @@
 
   var params = getHashParams();
 
-  var access_token = params.access_token,
-      refresh_token = params.refresh_token,
-      error = params.error;
+  var access_token = params.access_token;
 
   var artists = [];
-  var events = [];
   var output = "";
 
   var name;
@@ -30,8 +26,6 @@
   var days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   var date;
 
-  var list = "";
-
   var noConcerts = true;
 
   function getArtists(songs, artists) {
@@ -39,7 +33,7 @@
       name = songs.items[i].track.artists[0].name;
       if (artists.indexOf(name) == -1 ) {
         artists.push(name);
-        //console.log(songs.items[i].track.artists[0].name);
+        console.log(name);
         $.getJSON("https://api.bandsintown.com/artists/"+name+"/events/search.json?api_version=2.0&callback=?&app_id=concertFeed&location=use_geoip&radius=100", function(result) {
           if(typeof result !== 'undefined' && result.length > 0) {
             //console.log(result);
@@ -60,58 +54,45 @@
     }
   }
 
-  if (error) {
-    alert('There was an error during the authentication');
+  if (access_token) {
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me/tracks?limit=50',
+      headers: {
+        'Authorization': 'Bearer ' + access_token
+      },
+      success: function(response) {
+        let total = response.total;
+        for(let offset = 0; offset < total; offset += 50) {
+          $.ajax({
+            url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=50',
+            headers: {
+              'Authorization': 'Bearer ' + access_token
+            },
+            success: function(response) {
+              getArtists(response, artists);
+            }
+          });;
+        }
+      }
+    });
+
+    $.ajax({
+      url: 'https://api.spotify.com/v1/me',
+      headers: {
+        'Authorization': 'Bearer ' + access_token
+      },
+      success: function(response) {
+        if(response.display_name != null) {
+          document.getElementById('name').innerHTML = "Hello, " + response.display_name;
+        }
+      }
+    });
+
+    $('#loggedin').show();
+
   } else {
-    if (access_token) {
-
-      var songs;
-      var offset = 0;
-      var total;
-
-      $.when($.ajax({
-        url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=20',
-        headers: {
-          'Authorization': 'Bearer ' + access_token
-        },
-        success: function(response) {
-          songs = response;
-          total = songs.total;
-          for(offset = 0; offset <= total + 20; offset += 20){
-            (function(offset){
-              $.ajax({
-                url: 'https://api.spotify.com/v1/me/tracks?offset='+offset+'&limit=20',
-                headers: {
-                  'Authorization': 'Bearer ' + access_token
-                },
-                success: function(response) {
-                  songs = response;
-                  getArtists(songs, artists);
-                }
-              });
-            })(offset);
-          }
-        }
-      }));
-
-      $.ajax({
-        url: 'https://api.spotify.com/v1/me',
-        headers: {
-          'Authorization': 'Bearer ' + access_token
-        },
-        success: function(response) {
-          if(response.display_name != null) {
-            document.getElementById('name').innerHTML = "Hello, " + response.display_name;
-          }
-        }
-      });
-
-      $('#loggedin').show();
-
-    } else {
-        // render initial screen
-      $('#login').show();
-      $('#loggedin').hide();
-    }
+      // render initial screen
+    $('#login').show();
+    $('#loggedin').hide();
   }
 })();
