@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const credentials = require('./util/credentials.js');
 const utils = require('./util/util.js');
 
+const CONCERT_URI = '/concerts';
 const ERROR_URI = '/error';
 const LOGIN_URI = '/login';
 const REDIRECT_URI = '/callback';
@@ -47,7 +48,7 @@ app.get(LOGIN_URI, function(req, res) {
     querystring.stringify({
       response_type: 'code',
       client_id: credentials.client_id,
-      scope: 'user-library-read',
+      scope: 'user-read-private user-library-read',
       redirect_uri: app.get('CURRENT_HOST') + REDIRECT_URI,
       state: state,
     }));
@@ -82,11 +83,10 @@ app.get(REDIRECT_URI, function(req, res) {
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         // we can also pass the token to the browser to make requests from there
-        res.redirect('/#' +
-          querystring.stringify({
-            access_token: body.access_token,
-            refresh_token: body.refresh_token
-          })); //TODO: Find better way to pass these values
+        app.set('ACCESS_TOKEN', body.access_token);
+        app.set('REFRESH_TOKEN', body.refresh_token);
+        
+        res.redirect('/concerts');
       } else {
         res.redirect('/error#' +
           querystring.stringify({
@@ -99,4 +99,36 @@ app.get(REDIRECT_URI, function(req, res) {
 
 app.get(ERROR_URI, function(req, res) {
   res.render('error', {}); //Temporary error page
+});
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+app.get(CONCERT_URI, function(req, res) {
+  let vars = {};
+  let nameOptions = {
+    url: 'https://api.spotify.com/v1/me',
+    headers: {
+      'Authorization': 'Bearer ' + app.get('ACCESS_TOKEN')
+    },
+    json: true
+  }
+
+  request.get(nameOptions, function(error, response, body) {
+    if (!error && response.statusCode === 200) {
+      // we can also pass the token to the browser to make requests from there
+      vars.username = body.display_name;
+      vars.access_token = app.get('ACCESS_TOKEN');
+      vars.tm_key = credentials.tm_key;
+
+      res.render('concerts', vars);
+    } else {
+      res.redirect('/error#' +
+        querystring.stringify({
+          error: response.statusCode
+        }));
+    }
+  });
+  
 });

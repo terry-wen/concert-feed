@@ -3,10 +3,6 @@
   src: url(../assets/cmusans.ttf);
 }
 
-#login, #loggedin {
-  display: none;
-}
-
 ::selection {
   background: #FD0023;
 }
@@ -17,9 +13,6 @@ html, body {
 
 body {
   background-color: #131313;
-  background: url(../assets/bghome.png) center center;
-  background-size: cover;
-  background-attachment: : fixed;
 }
 
 /*that hip box with my name and stuff in it */

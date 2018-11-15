@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ConcertFeed: Let Music Find You</title>
+        <link href="assets/favicon.ico" rel="icon">
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div style="display:none" id="access_token">{{access_token}}</div>
+        <div style="display:none" id="tm_key">{{tm_key}}</div>
+        <div>
+            <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 column">
+                <div class="row">
+                    <div class="col-xs-3" id="name">Hello, {{username}}</div>
+                    <div class="col-xs-6"><img src="assets/CFlogo.png" width="100%"></div>
+                    <div class="col-xs-3" id="logout"></div>
+                </div>
+                <hr>
+                <div id="concerts">
+                    <div class="na" id="na">
+                        Loading concerts...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script id="entry-template" type="text/x-handlebars-template">
+        \{{#each concert}}
+            <div class="row vertical-center concertRow">
+                <div class="col-xs-2"><img class="thumb" src="\{{thumbUrl}}"></div>
+                <div class="col-xs-8">
+                    \{{name}} @ \{{venueName}}<br/>
+                    \{{date}} in \{{location}}
+                </div>
+                <div class="col-xs-2">
+                    <div class="buttonOuter">
+                        <a href="\{{url}}">
+                        <div align="center" class="button"><img alt="Open in Bandsintown" class="bitimg"></div></a>
+                    </div>
+                </div>
+            </div>
+        \{{else}}
+            <div class="na" id="na">
+                No concerts nearby! Check again soon!
+            </div>
+        \{{/each}}
+    </script>
+    <script type="text/javascript" src="js/handlebars.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="js/loadData.js"></script>
+</html>
